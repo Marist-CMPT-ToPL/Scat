@@ -9,7 +9,7 @@ ALPHA          → "a" ... "z" | "A" ... "Z" | "_" ;
 DIGIT          → "0" ... "9" ;
 
 ## Keywords
-Scat(replaces Print)
+Scat(replaces Print) 
 While
 If
 For
@@ -19,11 +19,4 @@ Or
 And
 
 ## Symbolic Operators
-==
->=
-<=
-!=
-<
->
-!
-=
+==, >=, <=, !=, <, >, !, =
