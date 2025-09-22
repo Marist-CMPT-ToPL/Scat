@@ -41,8 +41,26 @@ declaration    → classDecl
 classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?  
                  "{" function* "}" ;  
 funDecl        → "fun" function ;  
-varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;  
+varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;    
   
+expression     → assignment ;  
+  
+assignment     → ( call "." )? IDENTIFIER "=" assignment  
+               | logic_or ;  
+
+logic_or       → logic_and ( "or" logic_and )* ;  
+logic_and      → equality ( "and" equality )* ;  
+equality       → comparison ( ( "!=" | "==" ) comparison )* ;  
+comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;  
+term           → factor ( ( "-" | "+" ) factor )* ;  
+factor         → unary ( ( "/" | "*" ) unary )* ;  
+  
+unary          → ( "!" | "-" ) unary | call ;
+call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;  
+primary        → "true" | "false" | "zip" | "this"  
+               | NUMBER | STRING | IDENTIFIER | "(" expression ")"  
+               | "super" "." IDENTIFIER ;  
+               
 ## Keywords
 Scat(replaces Print)  
 While  
