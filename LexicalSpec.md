@@ -32,6 +32,16 @@ printStmt      → "print" expression ";" ;
 returnStmt     → "return" expression? ";" ;  
 whileStmt      → "while" "(" expression ")" statement ;  
 block          → "{" declaration* "}" ;  
+
+declaration    → classDecl  
+               | funDecl  
+               | varDecl  
+               | statement ;  
+
+classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?  
+                 "{" function* "}" ;  
+funDecl        → "fun" function ;  
+varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;  
   
 ## Keywords
 Scat(replaces Print)  
