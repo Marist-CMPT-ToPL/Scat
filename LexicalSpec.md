@@ -9,7 +9,11 @@ ALPHA          → "a" ... "z" | "A" ... "Z" | "_" ;
 DIGIT          → "0" ... "9" ;  
 BOOLEAN        → "true" | "false" ;  
 
-
+## Expression and Statement  
+function       → IDENTIFIER "(" parameters? ")" block ;  
+parameters     → IDENTIFIER ( "," IDENTIFIER )* ;  
+arguments      → expression ( "," expression )* ;  
+  
 ## Keywords
 Scat(replaces Print)  
 While  
@@ -23,4 +27,4 @@ function
 class   
 
 ## Symbolic Operators
-==, >=, <=, !=, <, >, !, =
+==, >=, <=, !=, <, >, !, =  
