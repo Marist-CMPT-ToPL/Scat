@@ -16,7 +16,9 @@ For
 Var  
 Zip  
 Or  
-And  
+And
+true
+false
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =
