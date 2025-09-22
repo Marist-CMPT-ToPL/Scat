@@ -19,8 +19,8 @@ Var
 Zip  
 Or  
 And  
-function
-class  
+function  
+class   
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =
