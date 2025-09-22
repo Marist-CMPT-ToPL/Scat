@@ -18,9 +18,8 @@ For
 Var  
 Zip  
 Or  
-And
-true  
-false  
+And  
+
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =
