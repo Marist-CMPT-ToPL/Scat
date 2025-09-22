@@ -28,7 +28,7 @@ forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
                            expression? ")" statement ;  
 ifStmt         → "if" "(" expression ")" statement  
                  ( "else" statement )? ;  
-printStmt      → "print" expression ";" ;  
+printStmt      → "scat" expression ";" ;  
 returnStmt     → "return" expression? ";" ;  
 whileStmt      → "while" "(" expression ")" statement ;  
 block          → "{" declaration* "}" ;  
