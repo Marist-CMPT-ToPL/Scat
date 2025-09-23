@@ -77,26 +77,32 @@ class
 ==, >=, <=, !=, <, >, !, =  
 
 ## Example Programs
+```
 var X = 23;  
 scat(X);  
-------------  
+```
+```
 for(var z; z <= 3; z++) {  
     scat("Mumble");  
 }  
-------------  
+```
+```
 fun dance(var text) {  
     scat("Dance: " + text);  
     var Dance = true;  
-}   
-------------  
+}  
+```
+```
 class Holder {  
     init() {  
         var x = 10;  
         scat(x);  
     }  
 }  
-------------  
+```
+```
 var questionmark = zip;  
 if (questionmark == zip OR (questionmark > 1 AND questionmark < 1)) {  
     scat("What is the question?");  
 }  
+```
