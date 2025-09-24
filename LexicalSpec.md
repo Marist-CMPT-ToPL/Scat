@@ -10,9 +10,17 @@ DIGIT          → "0" ... "9" ;
 BOOLEAN        → "true" | "false" ;  
 
 ## Expression and Statement  
-function       → IDENTIFIER "(" parameters? ")" block ;  
-parameters     → IDENTIFIER ( "," IDENTIFIER )* ;  
-arguments      → expression ( "," expression )* ;    
+program        → declaration* EOF ;  
+
+declaration    → classDecl  
+               | funDecl  
+               | varDecl  
+               | statement ;  
+
+classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?  
+                 "{" function* "}" ;  
+funDecl        → "fun" function ;  
+varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;    
 
 statement      → exprStmt  
                | forStmt  
@@ -32,16 +40,6 @@ printStmt      → "scat" expression ";" ;
 returnStmt     → "return" expression? ";" ;  
 whileStmt      → "while" "(" expression ")" statement ;  
 block          → "{" declaration* "}" ;  
-
-declaration    → classDecl  
-               | funDecl  
-               | varDecl  
-               | statement ;  
-
-classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?  
-                 "{" function* "}" ;  
-funDecl        → "fun" function ;  
-varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;    
   
 expression     → assignment ;  
   
@@ -61,6 +59,10 @@ primary        → "true" | "false" | "zip" | "this"
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"  
                | "super" "." IDENTIFIER ;  
                
+function       → IDENTIFIER "(" parameters? ")" block ;  
+parameters     → IDENTIFIER ( "," IDENTIFIER )* ;  
+arguments      → expression ( "," expression )* ;    
+
 ## Keywords
 Scat(replaces Print)  
 While  
