@@ -89,9 +89,10 @@ for(var z; z <= 3; z++) {
 }  
 ```
 ```
+var Dance = false;
 fun dance(var text) {  
     scat("Dance: " + text);  
-    var Dance = true;  
+    Dance = true;  
 }  
 ```
 ```
