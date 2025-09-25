@@ -44,7 +44,7 @@ public class Scat {
     }
 
     private static void run(String source) {
-        Scanner scanner = Scanner(source);
+        Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
         // For now, just print the tokens.
