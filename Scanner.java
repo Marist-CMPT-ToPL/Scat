@@ -23,7 +23,7 @@ class Scanner {
         keywords.put("else",   TokenType.ELSE);
         keywords.put("false",  TokenType.FALSE);
         keywords.put("for",    TokenType.FOR);
-        //keywords.put("fun",    TokenType.FUN);
+        keywords.put("function",    TokenType.FUNCTION);
         keywords.put("if",     TokenType.IF);
         keywords.put("zip",    TokenType.ZIP);
         keywords.put("or",     TokenType.OR);
@@ -34,6 +34,7 @@ class Scanner {
         keywords.put("true",   TokenType.TRUE);
         keywords.put("var",    TokenType.VAR);
         keywords.put("while",  TokenType.WHILE);
+
     }
 
     Scanner(String source) {
