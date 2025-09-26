@@ -54,10 +54,12 @@ public class Scat {
     }
 
     static void error(int line, String message) {
+        System.out.println("I will call Report"); //Checks for error report
         report(line, "", message);
     }
 
     private static void report(int line, String where, String message) {
+        System.out.println("Report received"); //Checks for if error really went through
         System.err.println("[line " + line + "] Error" + where + ": " + message);
         hadError = true;
     }

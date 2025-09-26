@@ -1,4 +1,6 @@
 //package com.craftinginterpreters.lox;
+//javac *.java
+//java -cp .  Scat
 
 import java.util.ArrayList;
 import java.util.HashMap;
