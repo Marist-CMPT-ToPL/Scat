@@ -5,7 +5,7 @@ scat("hi) //No ending quotation for string
 scat(5 + 3; //Missing Parenthesis?
 ```
 ```
-var 1; //1 cannot be the name for a variable identifier
+"'"'"
 ```
 ```
 Var @ = 2; // @ is not valid

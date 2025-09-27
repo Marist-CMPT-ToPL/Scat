@@ -15,7 +15,6 @@ class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
-    private boolean expectedId = false;
 
     private static final Map<String, TokenType> keywords;
 
@@ -59,30 +58,26 @@ class Scanner {
         char c = advance();
 
         switch (c) {
-            case '(': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.LEFT_PAREN); break;
-            case ')': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.RIGHT_PAREN); break;
-            case '{': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.LEFT_BRACE); break;
-            case '}': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.RIGHT_BRACE); break;
-            case ',': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.COMMA); break;
-            case '.': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.DOT); break;
-            case '-': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.MINUS); break;
-            case '+': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.PLUS); break;
-            case ';': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.SEMICOLON); break;
-            case '*': if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } addToken(TokenType.STAR); break; 
+            case '(': addToken(TokenType.LEFT_PAREN); break;
+            case ')': addToken(TokenType.RIGHT_PAREN); break;
+            case '{': addToken(TokenType.LEFT_BRACE); break;
+            case '}': addToken(TokenType.RIGHT_BRACE); break;
+            case ',': addToken(TokenType.COMMA); break;
+            case '.': addToken(TokenType.DOT); break;
+            case '-': addToken(TokenType.MINUS); break;
+            case '+': addToken(TokenType.PLUS); break;
+            case ';': addToken(TokenType.SEMICOLON); break;
+            case '*': addToken(TokenType.STAR); break; 
             case '!':
-                if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } 
                 addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
                 break;
             case '=':
-                if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } 
                 addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
                 break;
             case '<':
-                if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } 
                 addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
                 break;
             case '>':
-                if (expectedId == true) { Scat.error(line, "Expected identifier after variable!"); } 
                 addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
                 break;
             case '/':
@@ -123,12 +118,6 @@ class Scanner {
 
         String text = source.substring(start, current);
         TokenType type = keywords.get(text);
-        expectedId = false;
-        if (type == TokenType.VAR)
-        {
-            expectedId = true;
-            System.out.println("Var Detected");
-        }
         if (type == null) type = TokenType.IDENTIFIER;
         addToken(type);
     }
@@ -142,10 +131,6 @@ class Scanner {
             advance();
 
             while (isDigit(peek())) advance();
-        }
-        if (expectedId == true)
-        {
-            Scat.error(line, "Expected Identifier after variable!");
         }
 
         addToken(TokenType.NUMBER,
