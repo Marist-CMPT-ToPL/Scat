@@ -49,10 +49,6 @@ class Scanner {
             // We are at the beginning of the next lexeme.
             start = current;
             scanToken();
-            if (expectedId == true)
-            {
-
-            }
         }
 
         tokens.add(new Token(TokenType.EOF, "", null, line));
