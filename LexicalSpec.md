@@ -20,8 +20,8 @@ OR
 AND  
 function  
 class 
-true
-false
+true  
+false  
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =  
