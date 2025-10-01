@@ -16,10 +16,12 @@ If
 For  
 Var  
 Zip  
-Or  
-And  
+OR  
+AND  
 function  
-class   
+class 
+true
+false
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =  
