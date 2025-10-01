@@ -16,10 +16,12 @@ If
 For  
 Var  
 Zip  
-Or  
-And  
+OR  
+AND  
 function  
-class   
+class 
+true
+false
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =  
@@ -30,7 +32,7 @@ Var X = 23;
 Scat(X);  
 ```
 ```
-For(Var z = 0; z <= 3; z++) {  
+For(Var z = 0; z <= 3; z+=1) {  
     Scat("Mumble");  
 }  
 ```
