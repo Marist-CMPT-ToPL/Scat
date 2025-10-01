@@ -19,7 +19,7 @@ Zip
 OR  
 AND  
 function  
-class 
+class   
 true  
 false  
 
