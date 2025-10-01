@@ -30,7 +30,7 @@ var X = 23;
 scat(X);  
 ```
 ```
-for(var z; z <= 3; z++) {  
+for(var z = 0; z <= 3; z++) {  
     scat("Mumble");  
 }  
 ```
