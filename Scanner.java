@@ -1,4 +1,6 @@
 //package com.craftinginterpreters.lox;
+//javac *.java
+//java -cp .  Scat
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +56,7 @@ class Scanner {
 
     private void scanToken() {
         char c = advance();
+
         switch (c) {
             case '(': addToken(TokenType.LEFT_PAREN); break;
             case ')': addToken(TokenType.RIGHT_PAREN); break;

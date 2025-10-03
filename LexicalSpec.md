@@ -16,42 +16,44 @@ If
 For  
 Var  
 Zip  
-Or  
-And  
+OR  
+AND  
 function  
 class   
+true  
+false  
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =  
 
 ## Example Programs
 ```
-var X = 23;  
-scat(X);  
+Var X = 23;  
+Scat(X);  
 ```
 ```
-for(var z; z <= 3; z++) {  
-    scat("Mumble");  
+For(Var z = 0; z <= 3; z+=1) {  
+    Scat("Mumble");  
 }  
 ```
 ```
-var Dance = false;
-fun dance(var text) {  
-    scat("Dance: " + text);  
+Var Dance = false;
+fun dance(Var text) {  
+    Scat("Dance: " + text);  
     Dance = true;  
 }  
 ```
 ```
 class Holder {  
     init() {  
-        var x = 10;  
-        scat(x);  
+        Var x = 10;  
+        Scat(x);  
     }  
 }  
 ```
 ```
-var questionmark = zip;  
-if (questionmark == zip OR (questionmark > 1 AND questionmark < 1)) {  
-    scat("What is the question?");  
+Var questionmark = zip;  
+If (queeestionmark == zip OR (questionmark > 1 AND questionmark < 1)) {  
+    Scat("What is the question?");  
 }  
 ```
