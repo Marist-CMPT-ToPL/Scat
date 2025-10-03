@@ -48,13 +48,16 @@ public class Scat {
         List<Token> tokens = scanner.scanTokens();
 
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
+        List<Stmt> statements = parser.parse();
+        //Expr expression = parser.parse();
 
         // Stop if there was a syntax error.
         if (hadError) return;
 
-        System.out.println(new AstPrinter().print(expression));
-        
+        //interpreter.interpret(statements);
+        //System.out.println(new AstPrinter().print(statements));
+        System.out.println(statements);
+
         // For now, just print the tokens.
         //for (Token token : tokens) {
         //    System.out.println(token);
