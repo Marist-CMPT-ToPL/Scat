@@ -19,3 +19,19 @@ If (x) {
     Scat "This will never run!";
 }
 ```
+## Extra Test Cases
+```
+for (var i = 0; ; i = i + 1) scat i;
+```
+```
+5 = x;
+```
+```
+return x
+```
+```
+while (x < 10)
+```
+```
+if (true) scat "Yes!"; nothing
+```
