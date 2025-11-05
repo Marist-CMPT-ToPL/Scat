@@ -1,5 +1,5 @@
 //package com.craftinginterpreters.lox;
-
+import java.util.ArrayList;
 import java.util.List;
 
 //import static com.craftinginterpreters.lox.TokenType.*;
@@ -13,13 +13,66 @@ class Parser {
     Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
-    Expr parse() {
+
+    
+    List<Stmt> parse() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!isAtEnd()) {
+            statements.add(statement());
+        }
+        return statements;
+    }
+
+    private Stmt statement() {
+        if (match(TokenType.SCAT)) return scatStatement();
+        if (match(TokenType.VAR)) return varDeclaration();
+        if (match(TokenType.LEFT_BRACE)) return new Stmt.Block(block());
+
+        return expressionStatement();
+    }
+
+    private Stmt scatStatement() {
+        Expr value = expression();
+        consume(TokenType.SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Scat(value);
+    }
+
+    private Stmt varDeclaration() {
+        Token name = consume(TokenType.IDENTIFIER, "Expect variable name.");
+
+        Expr initializer = null;
+        if (match(TokenType.EQUAL)) {
+            initializer = expression();
+        }
+
+        consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
+        return new Stmt.Var(name, initializer);
+    }
+
+    private List<Stmt> block() {
+        List<Stmt> statements = new ArrayList<>();
+
+        while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+            statements.add(statement());
+        }
+
+        consume(TokenType.RIGHT_BRACE, "Expect '}' after block.");
+        return statements;
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(TokenType.SEMICOLON, "Expect ';' after expression.");
+        return new Stmt.Expression(expr);
+    }
+
+    /*Expr parse() {
         try {
             return expression();
         } catch (ParseError error) {
             return null;
         }
-    }
+    }*/
 
     private Expr expression() {
         return equality();
@@ -107,7 +160,6 @@ class Parser {
     }
     private Token consume(TokenType type, String message) {
         if (check(type)) return advance();
-
         throw error(peek(), message);
     }
     private boolean check(TokenType type) {
