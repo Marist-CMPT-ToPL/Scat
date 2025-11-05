@@ -1,13 +1,17 @@
-//package com.craftinginterpreters.lox;
-
-class AstPrinter implements Expr.Visitor<String> {
+class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
+    
     String print(Expr expr) {
         return expr.accept(this);
     }
+    
+    String print(Stmt stmt) {
+        return stmt.accept(this);
+    }
+    
+    // Expression visitors
     @Override
     public String visitBinaryExpr(Expr.Binary expr) {
-        return parenthesize(expr.operator.lexeme,
-                            expr.left, expr.right);
+        return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
 
     @Override
@@ -26,28 +30,42 @@ class AstPrinter implements Expr.Visitor<String> {
         return parenthesize(expr.operator.lexeme, expr.right);
     }
     
+    // Statement visitors
+    @Override
+    public String visitExpressionStmt(Stmt.Expression stmt) {
+        return "(expression " + print(stmt.expression) + ")";
+    }
+    
+    @Override
+    public String visitScatStmt(Stmt.Scat stmt) {
+        return "(scat " + print(stmt.expression) + ")";
+    }
+    
+    @Override
+    public String visitVarStmt(Stmt.Var stmt) {
+        String init = stmt.initializer != null ? print(stmt.initializer) : "nil";
+        return "(var " + stmt.name.lexeme + " " + init + ")";
+    }
+    
+    @Override
+    public String visitBlockStmt(Stmt.Block stmt) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(block");
+        for (Stmt s : stmt.statements) {
+            builder.append(" ").append(print(s));
+        }
+        builder.append(")");
+        return builder.toString();
+    }
+    
     private String parenthesize(String name, Expr... exprs) {
-    StringBuilder builder = new StringBuilder();
-
-    builder.append("(").append(name);
-    for (Expr expr : exprs) {
-      builder.append(" ");
-      builder.append(expr.accept(this));
-    }
-    builder.append(")");
-
-    return builder.toString();
-    }
-
-    public static void main(String[] args) {
-    Expr expression = new Expr.Binary(
-        new Expr.Unary(
-            new Token(TokenType.MINUS, "-", null, 1),
-            new Expr.Literal(123)),
-        new Token(TokenType.STAR, "*", null, 1),
-        new Expr.Grouping(
-            new Expr.Literal(45.67)));
-
-    System.out.println(new AstPrinter().print(expression));
+        StringBuilder builder = new StringBuilder();
+        builder.append("(").append(name);
+        for (Expr expr : exprs) {
+            builder.append(" ");
+            builder.append(expr.accept(this));
+        }
+        builder.append(")");
+        return builder.toString();
     }
 }
