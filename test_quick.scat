@@ -1,0 +1,1 @@
+if (5 < 3) scat 1; else scat 2;

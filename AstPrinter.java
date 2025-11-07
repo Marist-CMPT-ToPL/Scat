@@ -58,6 +58,44 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
         return builder.toString();
     }
     
+    @Override
+    public String visitIfStmt(Stmt.If stmt) {
+        if (stmt.elseBranch == null) {
+            return "(if " + print(stmt.condition) + " " + print(stmt.thenBranch) + ")";
+        }
+        return "(if " + print(stmt.condition) + " " + print(stmt.thenBranch) + " else " + print(stmt.elseBranch) + ")";
+    }
+    
+    @Override
+    public String visitWhileStmt(Stmt.While stmt) {
+        return "(while " + print(stmt.condition) + " " + print(stmt.body) + ")";
+    }
+    
+    @Override
+    public String visitForStmt(Stmt.For stmt) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(for");
+        if (stmt.initializer != null) {
+            builder.append(" ").append(print(stmt.initializer));
+        }
+        builder.append(" ");
+        if (stmt.condition != null) {
+            builder.append(print(stmt.condition));
+        }
+        builder.append(" ");
+        if (stmt.increment != null) {
+            builder.append(print(stmt.increment));
+        }
+        builder.append(" ").append(print(stmt.body)).append(")");
+        return builder.toString();
+    }
+    
+    @Override
+    public String visitReturnStmt(Stmt.Return stmt) {
+        if (stmt.value == null) return "(return)";
+        return "(return " + print(stmt.value) + ")";
+    }
+    
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
         builder.append("(").append(name);
