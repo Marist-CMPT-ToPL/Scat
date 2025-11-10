@@ -1,0 +1,31 @@
+// Test variables
+var x = 10;
+var y = 20;
+scat x + y;
+
+// Test functions
+function add(a, b) {
+    return a + b;
+}
+
+var result = add(x, y);
+scat result;
+
+// Test control flow
+if (result > 25) {
+    scat "Result is greater than 25";
+} else {
+    scat "Result is 25 or less";
+}
+
+// Test loops
+for (var i = 0; i < 3; i = i + 1) {
+    scat "Loop iteration: " + i;
+}
+
+// Test while loop
+var count = 0;
+while (count < 2) {
+    scat "While count: " + count;
+    count = count + 1;
+}

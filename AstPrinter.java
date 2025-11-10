@@ -30,6 +30,32 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
         return parenthesize(expr.operator.lexeme, expr.right);
     }
     
+    @Override
+    public String visitVariableExpr(Expr.Variable expr) {
+        return expr.name.lexeme;
+    }
+    
+    @Override
+    public String visitAssignExpr(Expr.Assign expr) {
+        return "(assign " + expr.name.lexeme + " " + print(expr.value) + ")";
+    }
+    
+    @Override
+    public String visitCallExpr(Expr.Call expr) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(call ").append(print(expr.callee));
+        for (Expr arg : expr.arguments) {
+            builder.append(" ").append(print(arg));
+        }
+        builder.append(")");
+        return builder.toString();
+    }
+    
+    @Override
+    public String visitLogicalExpr(Expr.Logical expr) {
+        return parenthesize(expr.operator.lexeme, expr.left, expr.right);
+    }
+    
     // Statement visitors
     @Override
     public String visitExpressionStmt(Stmt.Expression stmt) {
@@ -37,14 +63,30 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
     }
     
     @Override
-    public String visitScatStmt(Stmt.Scat stmt) {
-        return "(scat " + print(stmt.expression) + ")";
+    public String visitPrintStmt(Stmt.Print stmt) {
+        return "(print " + print(stmt.expression) + ")";
     }
     
     @Override
     public String visitVarStmt(Stmt.Var stmt) {
         String init = stmt.initializer != null ? print(stmt.initializer) : "nil";
         return "(var " + stmt.name.lexeme + " " + init + ")";
+    }
+    
+    @Override
+    public String visitFunctionStmt(Stmt.Function stmt) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(function ").append(stmt.name.lexeme).append("(");
+        for (int i = 0; i < stmt.params.size(); i++) {
+            if (i > 0) builder.append(" ");
+            builder.append(stmt.params.get(i).lexeme);
+        }
+        builder.append(") ");
+        for (Stmt bodyStmt : stmt.body) {
+            builder.append(print(bodyStmt)).append(" ");
+        }
+        builder.append(")");
+        return builder.toString();
     }
     
     @Override
