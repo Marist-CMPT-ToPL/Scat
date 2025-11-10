@@ -84,5 +84,6 @@ public class Scat {
         System.err.println(error.getMessage() +
             "\n[line " + error.token.line + "]");
         hadRuntimeError = true;
+
     }
 }
