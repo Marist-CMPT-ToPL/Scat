@@ -50,7 +50,8 @@ class Environment {
       return;
     }
 
-    throw new RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
+    // Allow assignment to create new variable in global scope
+    values.put(name.lexeme, value);
   }
 
   private Environment ancestor(int distance) {
