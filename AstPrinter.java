@@ -68,6 +68,16 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
         return builder.toString();
     }
     
+    @Override
+    public String visitArrayGetExpr(Expr.ArrayGet expr) {
+        return "(grab " + print(expr.array) + " " + print(expr.index) + ")";
+    }
+    
+    @Override
+    public String visitArraySetExpr(Expr.ArraySet expr) {
+        return "(replace " + print(expr.array) + " " + print(expr.index) + " " + print(expr.value) + ")";
+    }
+    
     // Statement visitors
     @Override
     public String visitExpressionStmt(Stmt.Expression stmt) {

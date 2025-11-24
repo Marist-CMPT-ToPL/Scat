@@ -205,6 +205,12 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
       case STAR:
         checkNumberOperands(expr.operator, left, right);
         return (double) left * (double) right;
+      case COMBINE:
+        if (left instanceof ScatArray && right instanceof ScatArray) {
+          return ((ScatArray) left).combine((ScatArray) right);
+        }
+        throw new RuntimeError(expr.operator,
+            "Operands must be two arrays.");
     }
 
     return null;
@@ -213,6 +219,14 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   @Override
   public Object visitCallExpr(Expr.Call expr) {
     Object callee = evaluate(expr.callee);
+
+    // Handle .length property access
+    if (expr.arguments.isEmpty() && expr.paren.type == TokenType.IDENTIFIER) {
+      if (expr.paren.lexeme.equals("length") && callee instanceof ScatArray) {
+        return (double) ((ScatArray) callee).length;
+      }
+      throw new RuntimeError(expr.paren, "Undefined property '" + expr.paren.lexeme + "'.");
+    }
 
     List<Object> arguments = new java.util.ArrayList<>();
     for (Expr argument : expr.arguments) {
@@ -277,6 +291,59 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     return lookUpVariable(expr.name, expr);
   }
 
+  @Override
+  public Object visitArrayLiteralExpr(Expr.ArrayLiteral expr) {
+    List<Object> elements = new java.util.ArrayList<>();
+    for (Expr element : expr.elements) {
+      elements.add(evaluate(element));
+    }
+    return new ScatArray(elements);
+  }
+
+  @Override
+  public Object visitArrayGetExpr(Expr.ArrayGet expr) {
+    Object array = evaluate(expr.array);
+    Object index = evaluate(expr.index);
+
+    if (!(array instanceof ScatArray)) {
+      throw new RuntimeError(expr.keyword, "First operand must be an array.");
+    }
+    if (!(index instanceof Double)) {
+      throw new RuntimeError(expr.keyword, "Index must be a number.");
+    }
+
+    ScatArray arr = (ScatArray) array;
+    int idx = (int) (double) index;
+    try {
+      return arr.get(idx);
+    } catch (RuntimeException e) {
+      throw new RuntimeError(expr.keyword, e.getMessage());
+    }
+  }
+
+  @Override
+  public Object visitArraySetExpr(Expr.ArraySet expr) {
+    Object array = evaluate(expr.array);
+    Object index = evaluate(expr.index);
+    Object value = evaluate(expr.value);
+
+    if (!(array instanceof ScatArray)) {
+      throw new RuntimeError(expr.keyword, "First operand must be an array.");
+    }
+    if (!(index instanceof Double)) {
+      throw new RuntimeError(expr.keyword, "Index must be a number.");
+    }
+
+    ScatArray arr = (ScatArray) array;
+    int idx = (int) (double) index;
+    try {
+      arr.set(idx, value);
+      return value;
+    } catch (RuntimeException e) {
+      throw new RuntimeError(expr.keyword, e.getMessage());
+    }
+  }
+
   private Object lookUpVariable(Token name, Expr expr) {
     Integer distance = locals.get(expr);
     if (distance != null) {
@@ -318,6 +385,10 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         text = text.substring(0, text.length() - 2);
       }
       return text;
+    }
+
+    if (object instanceof ScatArray) {
+      return object.toString();
     }
 
     return object.toString();
