@@ -208,12 +208,25 @@ class Parser {
     }
 
     private Expr logicalAnd() {
-        Expr expr = equality();
+        Expr expr = combine();  // NEW: Check for combine before equality
 
         while (match(TokenType.AND)) {
             Token operator = previous();
-            Expr right = equality();
+            Expr right = combine();
             expr = new Expr.Logical(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    // NEW: Handle 'combine' operator
+    private Expr combine() {
+        Expr expr = equality();
+
+        while (match(TokenType.COMBINE)) {
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Expr.Binary(expr, operator, right);
         }
 
         return expr;
@@ -283,6 +296,10 @@ class Parser {
         while (true) {
             if (match(TokenType.LEFT_PAREN)) {
                 expr = finishCall(expr);
+            } else if (match(TokenType.DOT)) {
+                // NEW: Handle .length property access
+                Token name = consume(TokenType.IDENTIFIER, "Expect property name after '.'.");
+                expr = new Expr.Call(expr, name, new ArrayList<>());
             } else {
                 break;
             }
@@ -315,6 +332,45 @@ class Parser {
 
         if (match(TokenType.NUMBER, TokenType.STRING)) {
             return new Expr.Literal(previous().literal);
+        }
+
+        // NEW: Handle grab(array, index)
+        if (match(TokenType.GRAB)) {
+            Token keyword = previous();
+            consume(TokenType.LEFT_PAREN, "Expect '(' after 'grab'.");
+            Expr array = expression();
+            consume(TokenType.COMMA, "Expect ',' after array in grab.");
+            Expr index = expression();
+            consume(TokenType.RIGHT_PAREN, "Expect ')' after grab arguments.");
+            return new Expr.ArrayGet(keyword, array, index);
+        }
+
+        // NEW: Handle replace(array, index, value)
+        if (match(TokenType.REPLACE)) {
+            Token keyword = previous();
+            consume(TokenType.LEFT_PAREN, "Expect '(' after 'replace'.");
+            Expr array = expression();
+            consume(TokenType.COMMA, "Expect ',' after array in replace.");
+            Expr index = expression();
+            consume(TokenType.COMMA, "Expect ',' after index in replace.");
+            Expr value = expression();
+            consume(TokenType.RIGHT_PAREN, "Expect ')' after replace arguments.");
+            return new Expr.ArraySet(keyword, array, index, value);
+        }
+
+        // NEW: Handle array literals [1, 2, 3]
+        if (match(TokenType.LEFT_BRACKET)) {
+            Token bracket = previous();
+            List<Expr> elements = new ArrayList<>();
+            
+            if (!check(TokenType.RIGHT_BRACKET)) {
+                do {
+                    elements.add(expression());
+                } while (match(TokenType.COMMA));
+            }
+            
+            consume(TokenType.RIGHT_BRACKET, "Expect ']' after array elements.");
+            return new Expr.ArrayLiteral(bracket, elements);
         }
 
         if (match(TokenType.IDENTIFIER)) {
