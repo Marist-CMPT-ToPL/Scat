@@ -55,6 +55,18 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
     public String visitLogicalExpr(Expr.Logical expr) {
         return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
+    //Array expression visitors
+    @Override
+    public String visitArrayLiteralExpr(Expr.ArrayLiteral expr) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int i = 0; i < expr.elements.size(); i++) {
+            if (i > 0) builder.append(", ");
+            builder.append(print(expr.elements.get(i)));
+        }
+        builder.append("]");
+        return builder.toString();
+    }
     
     // Statement visitors
     @Override
