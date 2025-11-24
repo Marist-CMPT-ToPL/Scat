@@ -12,6 +12,9 @@ abstract class Expr {
     R visitLogicalExpr(Logical expr);
     R visitUnaryExpr(Unary expr);
     R visitVariableExpr(Variable expr);
+    R visitArrayLiteralExpr(ArrayLiteral expr);  
+    R visitArrayGetExpr(ArrayGet expr);          
+    R visitArraySetExpr(ArraySet expr);         
   }
   static class Assign extends Expr {
     Assign(Token name, Expr value) {
@@ -124,6 +127,59 @@ abstract class Expr {
     }
 
     final Token name;
+  }
+    //Array literal expression [1, 2, 3]
+  static class ArrayLiteral extends Expr {
+    ArrayLiteral(Token bracket, List<Expr> elements) {
+      this.bracket = bracket;
+      this.elements = elements;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitArrayLiteralExpr(this);
+    }
+
+    final Token bracket;
+    final List<Expr> elements;
+  }
+
+  //Array access expression - for grab(arr, index)
+  static class ArrayGet extends Expr {
+    ArrayGet(Token keyword, Expr array, Expr index) {
+      this.keyword = keyword;
+      this.array = array;
+      this.index = index;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitArrayGetExpr(this);
+    }
+
+    final Token keyword;
+    final Expr array;
+    final Expr index;
+  }
+
+  //Array assignment expression - for replace(arr, index, value)
+  static class ArraySet extends Expr {
+    ArraySet(Token keyword, Expr array, Expr index, Expr value) {
+      this.keyword = keyword;
+      this.array = array;
+      this.index = index;
+      this.value = value;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitArraySetExpr(this);
+    }
+
+    final Token keyword;
+    final Expr array;
+    final Expr index;
+    final Expr value;
   }
 
   abstract <R> R accept(Visitor<R> visitor);

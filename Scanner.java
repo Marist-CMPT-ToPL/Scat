@@ -36,6 +36,9 @@ class Scanner {
         keywords.put("true",   TokenType.TRUE);
         keywords.put("var",    TokenType.VAR);
         keywords.put("while",  TokenType.WHILE);
+        keywords.put("grab",   TokenType.GRAB);
+        keywords.put("replace", TokenType.REPLACE);
+        keywords.put("combine", TokenType.COMBINE);
 
     }
 
