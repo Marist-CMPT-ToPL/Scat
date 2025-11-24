@@ -15,7 +15,9 @@ enum TokenType {
     IDENTIFIER, STRING, NUMBER,
 
     // Keywords.
-    SCAT, WHILE, IF, FOR, VAR, ZIP, OR, AND, FUNCTION, CLASS, ELSE, TRUE, FALSE, RETURN, EOF, THIS, SUPER
+    SCAT, WHILE, IF, FOR, VAR, ZIP, OR, AND, FUNCTION,
+    CLASS, ELSE, TRUE, FALSE, RETURN, GRAB, REPLACE, 
+    COMBINE, EOF, THIS, SUPER
 }
 
 //Note! Might have to change because our set of keywords is different?

@@ -1,4 +1,4 @@
-// Test variables
+// Test variables: should print 30
 var x = 10;
 var y = 20;
 scat x + y;
