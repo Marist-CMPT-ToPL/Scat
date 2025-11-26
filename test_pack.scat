@@ -1,0 +1,142 @@
+
+// PACK FEATURE TEST FILE //
+
+// Test 1: Basic pack definition and instance creation
+pack Point {
+  x;
+  y;
+}
+
+var p1 = Point(10, 20);
+scat p1.x;   // Expected: 10
+scat p1.y;   // Expected: 20
+
+// Test 2: Field modification
+p1.x = 100;
+p1.y = 200;
+scat p1.x;   // Expected: 100
+scat p1.y;   // Expected: 200
+
+// Test 3: Multiple instances
+var p2 = Point(5, 15);
+var p3 = Point(0, 0);
+scat p2.x;   // Expected: 5
+scat p3.y;   // Expected: 0
+
+// Test 4: Different pack type
+pack Student {
+  id;
+  grade;
+  gpa;
+}
+
+var s1 = Student(12345, 11, 3.8);
+var s2 = Student(67890, 12, 3.5);
+
+scat s1.id;     // Expected: 12345
+scat s2.grade;  // Expected: 12
+scat s1.gpa;    // Expected: 3.8
+
+// Test 5: Pack with functions
+pack Rectangle {
+  width;
+  height;
+}
+
+function area(rect) {
+  return rect.width * rect.height;
+}
+
+function perimeter(rect) {
+  return 2 * (rect.width + rect.height);
+}
+
+var r1 = Rectangle(5, 10);
+scat area(r1);       // Expected: 50
+scat perimeter(r1);  // Expected: 30
+
+// Test 6: Modifying fields in functions
+function grow(rect, amount) {
+  rect.width = rect.width + amount;
+  rect.height = rect.height + amount;
+}
+
+grow(r1, 5);
+scat r1.width;   // Expected: 10
+scat r1.height;  // Expected: 15
+
+// Test 7: Pack in array
+pack Item {
+  name;
+  price;
+}
+
+var cart = [Item("Apple", 1), Item("Banana", 2), Item("Orange", 3)];
+scat cart[0].name;   // Expected: Apple
+scat cart[1].price;  // Expected: 2
+scat cart[2].name;   // Expected: Orange
+
+// Test 8: Loop through array of packs
+var total = 0;
+for (var i = 0; i < 3; i = i + 1) {
+  total = total + cart[i].price;
+}
+scat total;  // Expected: 6
+
+// Test 9: Pack with conditionals
+pack Account {
+  balance;
+  active;
+}
+
+var acc = Account(100, true);
+
+if (acc.balance > 50) {
+  scat "High balance";  // Expected: High balance
+}
+
+if (acc.active) {
+  acc.balance = acc.balance + 50;
+}
+scat acc.balance;  // Expected: 150
+
+// Test 10: Nested packs
+pack Address {
+  street;
+  city;
+}
+
+pack Person {
+  name;
+  addr;
+}
+
+var address1 = Address("123 Main St", "Springfield");
+var person1 = Person("Alice", address1);
+
+scat person1.name;        // Expected: Alice
+scat person1.addr.city;   // Expected: Springfield
+
+// Test 11: Pack fields with expressions
+pack Counter {
+  count;
+}
+
+var c = Counter(0);
+c.count = c.count + 1;
+c.count = c.count + 1;
+c.count = c.count + 1;
+scat c.count;  // Expected: 3
+
+// Test 12: String concatenation with pack fields
+pack Player {
+  username;
+  score;
+}
+
+var player = Player("John", 100);
+scat "Player: " + player.username;  // Expected: Player: John
+scat "Score: " + player.score;      // Expected: Score: 100
+
+player.score = player.score + 50;
+scat "New score: " + player.score;  // Expected: New score: 150

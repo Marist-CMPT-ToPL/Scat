@@ -115,7 +115,6 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
   public Void visitPackStmt(Stmt.Pack stmt) {
     declare(stmt.name);
     define(stmt.name);
-    resolve(stmt.fields);
     return null;
   }
 

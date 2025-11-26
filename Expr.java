@@ -15,7 +15,6 @@ abstract class Expr {
     R visitArrayLiteralExpr(ArrayLiteral expr);  
     R visitArrayGetExpr(ArrayGet expr);          
     R visitArraySetExpr(ArraySet expr);
-    R visitPackExpr(Pack expr);
     R visitGetExpr(Get expr);
     R visitSetExpr(Set expr);
   }

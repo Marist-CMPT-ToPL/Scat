@@ -55,6 +55,17 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
     public String visitLogicalExpr(Expr.Logical expr) {
         return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
+
+    @Override
+    public String visitGetExpr(Expr.Get expr) {
+        return "(get " + print(expr.object) + " " + expr.name.lexeme + ")";
+    }
+
+    @Override
+    public String visitSetExpr(Expr.Set expr) {
+        return "(set " + print(expr.object) + " " + expr.name.lexeme + " " + print(expr.value) + ")";
+    }
+    
     //Array expression visitors
     @Override
     public String visitArrayLiteralExpr(Expr.ArrayLiteral expr) {
@@ -86,13 +97,25 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
     
     @Override
     public String visitPrintStmt(Stmt.Print stmt) {
-        return "(print " + print(stmt.expression) + ")";
+        return "(scat " + print(stmt.expression) + ")";
     }
     
     @Override
     public String visitVarStmt(Stmt.Var stmt) {
         String init = stmt.initializer != null ? print(stmt.initializer) : "nil";
         return "(var " + stmt.name.lexeme + " " + init + ")";
+    }
+
+    @Override
+    public String visitPackStmt(Stmt.Pack stmt) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(pack ").append(stmt.name.lexeme).append(" {");
+        for (int i = 0; i < stmt.fields.size(); i++) {
+            if (i > 0) builder.append(", ");
+            builder.append(stmt.fields.get(i).lexeme);
+        }
+        builder.append("})");
+        return builder.toString();
     }
     
     @Override
