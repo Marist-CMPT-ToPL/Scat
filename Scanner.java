@@ -39,6 +39,7 @@ class Scanner {
         keywords.put("grab",   TokenType.GRAB);
         keywords.put("replace", TokenType.REPLACE);
         keywords.put("combine", TokenType.COMBINE);
+        keywords.put("pack",   TokenType.PACK);
 
     }
 
