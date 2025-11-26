@@ -140,3 +140,5 @@ scat "Score: " + player.score;      // Expected: Score: 100
 
 player.score = player.score + 50;
 scat "New score: " + player.score;  // Expected: New score: 150
+
+// completed milestone 8
