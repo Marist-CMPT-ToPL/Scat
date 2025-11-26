@@ -14,7 +14,10 @@ abstract class Expr {
     R visitVariableExpr(Variable expr);
     R visitArrayLiteralExpr(ArrayLiteral expr);  
     R visitArrayGetExpr(ArrayGet expr);          
-    R visitArraySetExpr(ArraySet expr);         
+    R visitArraySetExpr(ArraySet expr);
+    R visitPackExpr(Pack expr);
+    R visitGetExpr(Get expr);
+    R visitSetExpr(Set expr);
   }
   static class Assign extends Expr {
     Assign(Token name, Expr value) {
@@ -179,6 +182,39 @@ abstract class Expr {
     final Token keyword;
     final Expr array;
     final Expr index;
+    final Expr value;
+  }
+  // Get expression - for accessing pack fields
+  static class Get extends Expr {
+    Get(Expr object, Token name) {
+      this.object = object;
+      this.name = name;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitGetExpr(this);
+    }
+
+    final Expr object;
+    final Token name;
+  }
+
+  // Set expression - for setting pack fields
+  static class Set extends Expr {
+    Set(Expr object, Token name, Expr value) {
+      this.object = object;
+      this.name = name;
+      this.value = value;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitSetExpr(this);
+    }
+
+    final Expr object;
+    final Token name;
     final Expr value;
   }
 
