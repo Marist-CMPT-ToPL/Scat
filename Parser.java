@@ -35,6 +35,20 @@ class Parser {
             return null;
         }
     }
+    private Stmt packDeclaration() {
+        Token name = consume(TokenType.IDENTIFIER, "Expect pack name.");
+        consume(TokenType.LEFT_BRACE, "Expect '{' before pack body.");
+        
+        List<Token> fields = new ArrayList<>();
+        while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+            Token field = consume(TokenType.IDENTIFIER, "Expect field name.");
+            fields.add(field);
+            consume(TokenType.SEMICOLON, "Expect ';' after field name.");
+        }
+        
+        consume(TokenType.RIGHT_BRACE, "Expect '}' after pack body.");
+        return new Stmt.Pack(name, fields);
+    }
 
     private Stmt function(String kind) {
         Token name = consume(TokenType.IDENTIFIER, "Expect " + kind + " name.");
@@ -187,6 +201,9 @@ class Parser {
             if (expr instanceof Expr.Variable) {
                 Token name = ((Expr.Variable)expr).name;
                 return new Expr.Assign(name, value);
+            } else if (expr instanceof Expr.Get) {
+                Expr.Get get = (Expr.Get)expr;
+                return new Expr.Set(get.object, get.name, value);
             }
 
             error(equals, "Invalid assignment target."); 
