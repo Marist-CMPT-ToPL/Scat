@@ -13,6 +13,7 @@ abstract class Stmt {
     R visitFunctionStmt(Function stmt);
     R visitReturnStmt(Return stmt);
     R visitForStmt(For stmt);
+    R visitPackStmt(Pack stmt);
   }
 
   static class Block extends Stmt {
@@ -40,6 +41,7 @@ abstract class Stmt {
 
     final Expr expression;
   }
+  
 
   static class Print extends Stmt {
     Print(Expr expression) {
@@ -150,6 +152,21 @@ abstract class Stmt {
     final Expr condition;
     final Expr increment;
     final Stmt body;
+  }
+
+  static class Pack extends Stmt {
+    Pack(Token name, List<Token> fields) {
+      this.name = name;
+      this.fields = fields;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitPackStmt(this);
+    }
+
+    final Token name;
+    final List<Token> fields;
   }
 
   abstract <R> R accept(Visitor<R> visitor);
