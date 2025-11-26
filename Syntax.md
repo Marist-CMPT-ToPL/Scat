@@ -1,10 +1,12 @@
 ## Expression, Statement, Declaration, and program
 program        → declaration* EOF ;  
 
-declaration    → classDecl  
+declaration    → packDecl | classDecl  
                | funDecl  
                | varDecl  
-               | statement ;  
+               | statement ; 
+               packDecl → "pack" IDENTIFIER "{" field* "}" ;  
+               field → IDENTIFIER ";" ;  
 
 classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?  
                  "{" function* "}" ;  
@@ -46,7 +48,9 @@ unary          → ( "!" | "-" ) unary | call ;
 call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;  
 primary        → "true" | "false" | "zip" | "this"  
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"  
-               | "super" "." IDENTIFIER ;  
+               | "super" "." IDENTIFIER | arrayLiteral | "grab" "(" expression ","  
+               expression ")" | "replace" "(" expression "," expression "," expression  
+               ")"; arrayLiteral → ["arguments?];
                
 function       → IDENTIFIER "(" parameters? ")" block ;  
 parameters     → IDENTIFIER ( "," IDENTIFIER )* ;  
