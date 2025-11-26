@@ -96,6 +96,18 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   }
 
   @Override
+  public Void visitPackStmt(Stmt.Pack stmt) {
+    List<String> fieldNames = new ArrayList<>();
+    for (Token field : stmt.fields) {
+      fieldNames.add(field.lexeme);
+    }
+    
+    ScatPack pack = new ScatPack(stmt.name.lexeme, fieldNames);
+    environment.define(stmt.name.lexeme, pack);
+    return null;
+  }
+
+  @Override
   public Void visitIfStmt(Stmt.If stmt) {
     if (isTruthy(evaluate(stmt.condition))) {
       execute(stmt.thenBranch);
@@ -249,6 +261,24 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   }
 
   @Override
+  public Object visitGetExpr(Expr.Get expr) {
+    Object object = evaluate(expr.object);
+    if (object instanceof ScatStruct) {
+      return ((ScatStruct) object).get(expr.name);
+    }
+    throw new RuntimeError(expr.name, "Only objects have properties.");
+  }
+
+  @Override
+  public Object visitSetExpr(Expr.Set expr) {
+    Object object = evaluate(expr.object);
+    if (object instanceof ScatStruct) {
+      ((ScatStruct) object).set(expr.name, evaluate(expr.value));
+    }
+    throw new RuntimeError(expr.name, "Only objects have properties.");
+  }
+
+  @Override
   public Object visitGroupingExpr(Expr.Grouping expr) {
     return evaluate(expr.expression);
   }
@@ -377,7 +407,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   }
 
   private String stringify(Object object) {
-    if (object == null) return "nil";
+    if (object == null) return "zip";
 
     if (object instanceof Double) {
       String text = object.toString();
