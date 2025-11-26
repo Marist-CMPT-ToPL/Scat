@@ -27,6 +27,7 @@ class Parser {
 
     private Stmt declaration() {
         try {
+            if (match(TokenType.PACK)) return packDeclaration();
             if (match(TokenType.VAR)) return varDeclaration();
             if (match(TokenType.FUNCTION)) return function("function");
             return statement();
@@ -35,6 +36,7 @@ class Parser {
             return null;
         }
     }
+
     private Stmt packDeclaration() {
         Token name = consume(TokenType.IDENTIFIER, "Expect pack name.");
         consume(TokenType.LEFT_BRACE, "Expect '{' before pack body.");
@@ -225,7 +227,7 @@ class Parser {
     }
 
     private Expr logicalAnd() {
-        Expr expr = combine();  // NEW: Check for combine before equality
+        Expr expr = combine();
 
         while (match(TokenType.AND)) {
             Token operator = previous();
@@ -236,7 +238,6 @@ class Parser {
         return expr;
     }
 
-    // NEW: Handle 'combine' operator
     private Expr combine() {
         Expr expr = equality();
 
@@ -313,10 +314,14 @@ class Parser {
         while (true) {
             if (match(TokenType.LEFT_PAREN)) {
                 expr = finishCall(expr);
+            } else if (match(TokenType.LEFT_BRACKET)) {
+                // Handle bracket notation: array[index]
+                Expr index = expression();
+                Token bracket = consume(TokenType.RIGHT_BRACKET, "Expect ']' after index.");
+                expr = new Expr.ArrayGet(bracket, expr, index);
             } else if (match(TokenType.DOT)) {
-                // NEW: Handle .length property access
                 Token name = consume(TokenType.IDENTIFIER, "Expect property name after '.'.");
-                expr = new Expr.Call(expr, name, new ArrayList<>());
+                expr = new Expr.Get(expr, name);
             } else {
                 break;
             }
@@ -351,7 +356,6 @@ class Parser {
             return new Expr.Literal(previous().literal);
         }
 
-        // NEW: Handle grab(array, index)
         if (match(TokenType.GRAB)) {
             Token keyword = previous();
             consume(TokenType.LEFT_PAREN, "Expect '(' after 'grab'.");
@@ -362,7 +366,6 @@ class Parser {
             return new Expr.ArrayGet(keyword, array, index);
         }
 
-        // NEW: Handle replace(array, index, value)
         if (match(TokenType.REPLACE)) {
             Token keyword = previous();
             consume(TokenType.LEFT_PAREN, "Expect '(' after 'replace'.");
@@ -375,7 +378,6 @@ class Parser {
             return new Expr.ArraySet(keyword, array, index, value);
         }
 
-        // NEW: Handle array literals [1, 2, 3]
         if (match(TokenType.LEFT_BRACKET)) {
             Token bracket = previous();
             List<Expr> elements = new ArrayList<>();
@@ -460,6 +462,7 @@ class Parser {
                 case WHILE:
                 case SCAT:
                 case RETURN:
+                case PACK:
                     return;
             }
 

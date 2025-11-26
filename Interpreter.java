@@ -273,7 +273,9 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   public Object visitSetExpr(Expr.Set expr) {
     Object object = evaluate(expr.object);
     if (object instanceof ScatStruct) {
-      ((ScatStruct) object).set(expr.name, evaluate(expr.value));
+      Object value = evaluate(expr.value);
+      ((ScatStruct) object).set(expr.name, value);
+      return value;
     }
     throw new RuntimeError(expr.name, "Only objects have properties.");
   }
