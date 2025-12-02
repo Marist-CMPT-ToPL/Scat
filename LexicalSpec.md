@@ -22,6 +22,10 @@ function
 class   
 true  
 false  
+grab
+replace
+pack
+combine
 
 ## Symbolic Operators
 ==, >=, <=, !=, <, >, !, =  
